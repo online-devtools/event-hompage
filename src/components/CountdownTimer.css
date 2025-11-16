@@ -1,0 +1,135 @@
+.countdown-container {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  pointer-events: auto;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+}
+
+.countdown-title {
+  color: #d32f2f;
+  font-size: 1.2rem;
+  margin: 0 0 0.75rem 0;
+  text-align: center;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.countdown-boxes {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.countdown-box {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 60px;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.countdown-number {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.countdown-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.7rem;
+  margin-top: 0.25rem;
+  font-weight: 600;
+}
+
+.countdown-separator {
+  color: #d32f2f;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 0 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .countdown-container {
+    padding: 0.6rem 0.8rem;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 15px;
+  }
+
+  .countdown-title {
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .countdown-boxes {
+    gap: 0.3rem;
+  }
+
+  .countdown-box {
+    padding: 0.4rem 0.6rem;
+    min-width: 45px;
+    border-radius: 8px;
+  }
+
+  .countdown-number {
+    font-size: 1.2rem;
+  }
+
+  .countdown-label {
+    font-size: 0.55rem;
+  }
+
+  .countdown-separator {
+    font-size: 1rem;
+    padding: 0 0.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .countdown-container {
+    padding: 0.5rem 0.6rem;
+    top: 0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .countdown-title {
+    font-size: 0.7rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .countdown-boxes {
+    gap: 0.2rem;
+  }
+
+  .countdown-box {
+    padding: 0.3rem 0.4rem;
+    min-width: 32px;
+    border-radius: 6px;
+  }
+
+  .countdown-number {
+    font-size: 0.95rem;
+  }
+
+  .countdown-label {
+    font-size: 0.45rem;
+    margin-top: 0.15rem;
+  }
+
+  .countdown-separator {
+    font-size: 0.8rem;
+    padding: 0;
+  }
+}

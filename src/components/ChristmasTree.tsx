@@ -18,21 +18,22 @@ export function ChristmasTree() {
     }
   })
 
-  // 장식 구슬들 생성
+  // 장식 구슬들 생성 (더 많고 랜덤하게)
   const ornaments = useMemo(() => {
     const positions: [number, number, number][] = []
-    const colors = ['#ff0000', '#ffd700', '#0000ff', '#ffffff', '#ff69b4']
+    const colors = ['#ff0000', '#ffd700', '#0000ff', '#ffffff', '#ff69b4', '#00ff00', '#ff8c00']
 
-    // 트리 레이어별로 장식 배치
-    for (let layer = 0; layer < 5; layer++) {
-      const radius = 0.5 - layer * 0.08
-      const numOrnaments = 6 - layer
-      const height = layer * 0.4 - 1
+    // 트리 레이어별로 장식 배치 (더 자연스럽게)
+    for (let layer = 0; layer < 8; layer++) {
+      const radius = 0.9 - layer * 0.1
+      const numOrnaments = 8 - Math.floor(layer / 2)
+      const height = layer * 0.35 - 1.2
 
       for (let i = 0; i < numOrnaments; i++) {
-        const angle = (i / numOrnaments) * Math.PI * 2
-        const x = Math.cos(angle) * radius
-        const z = Math.sin(angle) * radius
+        const angle = (i / numOrnaments) * Math.PI * 2 + (layer * 0.3)
+        const randomOffset = (Math.random() - 0.5) * 0.1
+        const x = Math.cos(angle) * (radius + randomOffset)
+        const z = Math.sin(angle) * (radius + randomOffset)
         positions.push([x, height, z])
       }
     }
@@ -45,58 +46,117 @@ export function ChristmasTree() {
 
   return (
     <group ref={treeRef}>
-      {/* 트리 본체 - 원뿔 3개 레이어 */}
-      <mesh position={[0, -0.5, 0]} castShadow>
-        <coneGeometry args={[1, 2, 8]} />
-        <meshStandardMaterial color="#0d5c0d" />
+      {/* 트리 본체 - 더 현실적인 5개 레이어 */}
+      <mesh position={[0, -0.7, 0]} castShadow receiveShadow>
+        <coneGeometry args={[1.1, 1.8, 64]} />
+        <meshStandardMaterial
+          color="#0d4d0d"
+          metalness={0.1}
+          roughness={0.8}
+          flatShading={false}
+        />
       </mesh>
-      <mesh position={[0, 0.3, 0]} castShadow>
-        <coneGeometry args={[0.8, 1.6, 8]} />
-        <meshStandardMaterial color="#0f6b0f" />
+      <mesh position={[0, -0.1, 0]} castShadow receiveShadow>
+        <coneGeometry args={[0.95, 1.5, 64]} />
+        <meshStandardMaterial
+          color="#0f5c0f"
+          metalness={0.1}
+          roughness={0.8}
+          flatShading={false}
+        />
       </mesh>
-      <mesh position={[0, 1, 0]} castShadow>
-        <coneGeometry args={[0.6, 1.2, 8]} />
-        <meshStandardMaterial color="#118a11" />
+      <mesh position={[0, 0.4, 0]} castShadow receiveShadow>
+        <coneGeometry args={[0.8, 1.3, 64]} />
+        <meshStandardMaterial
+          color="#116b11"
+          metalness={0.1}
+          roughness={0.8}
+          flatShading={false}
+        />
+      </mesh>
+      <mesh position={[0, 0.85, 0]} castShadow receiveShadow>
+        <coneGeometry args={[0.65, 1.1, 64]} />
+        <meshStandardMaterial
+          color="#147a14"
+          metalness={0.1}
+          roughness={0.8}
+          flatShading={false}
+        />
+      </mesh>
+      <mesh position={[0, 1.25, 0]} castShadow receiveShadow>
+        <coneGeometry args={[0.5, 0.9, 64]} />
+        <meshStandardMaterial
+          color="#178917"
+          metalness={0.1}
+          roughness={0.8}
+          flatShading={false}
+        />
       </mesh>
 
-      {/* 나무 줄기 */}
-      <mesh position={[0, -1.8, 0]} castShadow>
-        <cylinderGeometry args={[0.15, 0.15, 0.6]} />
-        <meshStandardMaterial color="#8b4513" />
+      {/* 나무 줄기 (더 현실적) */}
+      <mesh position={[0, -1.9, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.18, 0.22, 0.8, 32]} />
+        <meshStandardMaterial
+          color="#4a2f1a"
+          metalness={0.05}
+          roughness={0.95}
+        />
       </mesh>
 
-      {/* 꼭대기 별 */}
-      <mesh position={[0, 1.8, 0]}>
-        <octahedronGeometry args={[0.15]} />
-        <meshStandardMaterial color="#ffd700" emissive="#ffd700" emissiveIntensity={2} />
+      {/* 나무 뿌리 */}
+      <mesh position={[0, -2.25, 0]} receiveShadow>
+        <cylinderGeometry args={[0.3, 0.4, 0.2, 32]} />
+        <meshStandardMaterial
+          color="#3d2614"
+          metalness={0.05}
+          roughness={0.95}
+        />
       </mesh>
 
-      {/* 장식 구슬들 */}
+      {/* 꼭대기 별 (더 크고 화려하게) */}
+      <group position={[0, 1.8, 0]}>
+        <mesh castShadow>
+          <octahedronGeometry args={[0.2, 0]} />
+          <meshStandardMaterial
+            color="#ffd700"
+            emissive="#ffd700"
+            emissiveIntensity={3}
+            metalness={0.8}
+            roughness={0.2}
+          />
+        </mesh>
+        <pointLight color="#ffd700" intensity={3} distance={4} />
+      </group>
+
+      {/* 장식 구슬들 (고품질) */}
       <group ref={ornamentsRef}>
         {ornaments.map((ornament, i) => (
           <mesh key={i} position={ornament.position} castShadow>
-            <sphereGeometry args={[0.08, 16, 16]} />
+            <sphereGeometry args={[0.08, 32, 32]} />
             <meshStandardMaterial
               color={ornament.color}
-              metalness={0.8}
-              roughness={0.2}
+              metalness={0.9}
+              roughness={0.1}
               emissive={ornament.color}
-              emissiveIntensity={0.3}
+              emissiveIntensity={0.5}
             />
           </mesh>
         ))}
       </group>
 
-      {/* 반짝이는 조명들 */}
-      {ornaments.slice(0, 10).map((ornament, i) => (
+      {/* 반짝이는 조명들 (더 많고 밝게) */}
+      {ornaments.map((ornament, i) => (
         <pointLight
           key={i}
           position={ornament.position}
           color={ornament.color}
-          intensity={0.5}
-          distance={1}
+          intensity={1.2}
+          distance={1.5}
         />
       ))}
+
+      {/* 트리 주변 환경광 */}
+      <pointLight position={[0, 0, 0]} color="#ffffff" intensity={0.5} distance={3} />
     </group>
   )
 }

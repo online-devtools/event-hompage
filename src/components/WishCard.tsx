@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
@@ -55,11 +55,13 @@ export function WishCard({ position, wish, author, color = '#ffe4e1', onClick }:
       <Text
         position={[0, 0.15, 0.03]}
         fontSize={0.08}
-        color="#333333"
+        color="#000000"
         maxWidth={0.5}
         textAlign="center"
         anchorX="center"
         anchorY="middle"
+        outlineWidth={0.003}
+        outlineColor="#ffffff"
       >
         {wish.length > 30 ? wish.substring(0, 30) + '...' : wish}
       </Text>
@@ -67,9 +69,11 @@ export function WishCard({ position, wish, author, color = '#ffe4e1', onClick }:
       <Text
         position={[0, -0.15, 0.03]}
         fontSize={0.06}
-        color="#666666"
+        color="#000000"
         anchorX="center"
         anchorY="middle"
+        outlineWidth={0.002}
+        outlineColor="#ffffff"
       >
         - {author}
       </Text>
@@ -81,12 +85,4 @@ export function WishCard({ position, wish, author, color = '#ffe4e1', onClick }:
       </mesh>
     </group>
   )
-}
-
-function useState(arg0: boolean): [any, any] {
-  const ref = useRef(arg0)
-  const setRef = (val: any) => {
-    ref.current = val
-  }
-  return [ref.current, setRef]
 }

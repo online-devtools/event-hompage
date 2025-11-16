@@ -79,14 +79,14 @@ export function InteractiveOrnament({ position, wish, onClick }: InteractiveOrna
       {hovered && wish && (
         <Text
           position={[0, -0.3, 0]}
-          fontSize={0.06}
-          color="#ffffff"
-          maxWidth={0.8}
+          fontSize={0.08}
+          color="#000000"
+          maxWidth={1}
           textAlign="center"
           anchorX="center"
           anchorY="top"
-          outlineWidth={0.005}
-          outlineColor="#000000"
+          outlineWidth={0.008}
+          outlineColor="#ffffff"
         >
           {wish.length > 20 ? wish.substring(0, 20) + '...' : wish}
         </Text>
