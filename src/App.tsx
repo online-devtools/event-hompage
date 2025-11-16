@@ -33,8 +33,6 @@ function App() {
   const [isWishModalOpen, setIsWishModalOpen] = useState(false)
   const [isFortuneModalOpen, setIsFortuneModalOpen] = useState(false)
   const [isGuestBookOpen, setIsGuestBookOpen] = useState(false)
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null)
-  const [selectedWishPosition, setSelectedWishPosition] = useState<[number, number, number] | null>(null)
   const [viewMessage, setViewMessage] = useState<{
     isOpen: boolean
     type: 'card' | 'wish'
@@ -102,7 +100,6 @@ function App() {
 
   // 카드 클릭 시 상세보기
   const handleCardClick = (card: Card) => {
-    setSelectedCard(card)
     setViewMessage({
       isOpen: true,
       type: 'card',
@@ -112,7 +109,7 @@ function App() {
   }
 
   // 장식 구슬 클릭 시
-  const handleOrnamentClick = (wish: Wish | null, position: [number, number, number]) => {
+  const handleOrnamentClick = (wish: Wish | null) => {
     if (wish) {
       setViewMessage({
         isOpen: true,
@@ -120,7 +117,6 @@ function App() {
         message: wish.wish
       })
     } else {
-      setSelectedWishPosition(position)
       setIsWishModalOpen(true)
     }
   }

@@ -6,7 +6,7 @@ export function SantaSleigh() {
   const groupRef = useRef<THREE.Group>(null)
   const timeRef = useRef(0)
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     timeRef.current += delta
 
     if (groupRef.current) {

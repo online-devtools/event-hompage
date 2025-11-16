@@ -14,7 +14,14 @@ export function Gifts() {
     }
   })
 
-  const giftConfigs = [
+  type GiftConfig = {
+    position: [number, number, number]
+    color: string
+    ribbonColor: string
+    size: number
+  }
+
+  const giftConfigs: GiftConfig[] = [
     { position: [-1, -1.5, 0.5], color: '#ff0000', ribbonColor: '#ffd700', size: 0.3 },
     { position: [1, -1.5, 0.3], color: '#0000ff', ribbonColor: '#ffffff', size: 0.25 },
     { position: [0.3, -1.5, 1], color: '#00ff00', ribbonColor: '#ff0000', size: 0.28 },

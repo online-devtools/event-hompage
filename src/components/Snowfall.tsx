@@ -52,7 +52,7 @@ export function Snowfall({ count = 200 }) {
     })
   }, [])
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (meshRef.current) {
       particles.forEach((particle, i) => {
         // 눈송이 떨어지는 효과

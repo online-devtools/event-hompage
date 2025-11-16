@@ -24,7 +24,7 @@ interface ChristmasSceneProps {
   cards: Card[]
   wishes: Wish[]
   onCardClick: (card: Card) => void
-  onOrnamentClick: (wish: Wish | null, position: [number, number, number]) => void
+  onOrnamentClick: (wish: Wish | null) => void
 }
 
 export function ChristmasScene({ cards, wishes, onCardClick, onOrnamentClick }: ChristmasSceneProps) {
@@ -90,7 +90,7 @@ export function ChristmasScene({ cards, wishes, onCardClick, onOrnamentClick }: 
             key={`ornament-${index}`}
             position={pos}
             wish={wishData?.wish}
-            onClick={() => onOrnamentClick(wishData || null, pos)}
+            onClick={() => onOrnamentClick(wishData || null)}
           />
         )
       })}

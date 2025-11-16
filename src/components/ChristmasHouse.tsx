@@ -3,8 +3,6 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export function ChristmasHouse() {
-  const smokeRef = useRef<THREE.Group>(null)
-
   return (
     <group position={[3, -2, -2]}>
       {/* 집 본체 */}
