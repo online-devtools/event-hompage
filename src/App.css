@@ -1,0 +1,194 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.scene-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+               0 0 40px rgba(255, 215, 0, 0.6),
+               0 0 60px rgba(255, 0, 0, 0.4);
+  margin-bottom: 1rem;
+  text-align: center;
+  animation: glow 2s ease-in-out infinite alternate;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.year {
+  font-size: 0.6em;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 1),
+               0 0 40px rgba(255, 215, 0, 0.8);
+}
+
+.message {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+               0 0 20px rgba(135, 206, 235, 0.6);
+  margin-top: 1rem;
+  text-align: center;
+  animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+                 0 0 40px rgba(255, 215, 0, 0.6),
+                 0 0 60px rgba(255, 0, 0, 0.4);
+  }
+  to {
+    text-shadow: 0 0 30px rgba(255, 255, 255, 1),
+                 0 0 60px rgba(255, 215, 0, 0.8),
+                 0 0 90px rgba(255, 0, 0, 0.6);
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* 눈송이 애니메이션 */
+.snowflakes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.snowflake {
+  position: absolute;
+  top: -10%;
+  color: #ffffff;
+  font-size: 2rem;
+  opacity: 0.8;
+  animation: fall linear infinite;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.snowflake:nth-child(1) {
+  left: 10%;
+  animation-duration: 8s;
+  animation-delay: 0s;
+  font-size: 1.5rem;
+}
+
+.snowflake:nth-child(2) {
+  left: 20%;
+  animation-duration: 12s;
+  animation-delay: 2s;
+  font-size: 2rem;
+}
+
+.snowflake:nth-child(3) {
+  left: 35%;
+  animation-duration: 10s;
+  animation-delay: 4s;
+  font-size: 1.8rem;
+}
+
+.snowflake:nth-child(4) {
+  left: 50%;
+  animation-duration: 14s;
+  animation-delay: 1s;
+  font-size: 2.2rem;
+}
+
+.snowflake:nth-child(5) {
+  left: 65%;
+  animation-duration: 11s;
+  animation-delay: 3s;
+  font-size: 1.6rem;
+}
+
+.snowflake:nth-child(6) {
+  left: 80%;
+  animation-duration: 9s;
+  animation-delay: 5s;
+  font-size: 1.9rem;
+}
+
+.snowflake:nth-child(7) {
+  left: 90%;
+  animation-duration: 13s;
+  animation-delay: 0.5s;
+  font-size: 2.1rem;
+}
+
+@keyframes fall {
+  0% {
+    top: -10%;
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    top: 110%;
+    transform: translateX(100px) rotate(360deg);
+  }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .title {
+    padding: 0 1rem;
+  }
+
+  .message {
+    padding: 0 2rem;
+  }
+
+  .snowflake {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .snowflake {
+    font-size: 1rem;
+  }
+}
