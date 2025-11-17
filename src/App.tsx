@@ -5,37 +5,20 @@ import { FortuneModal } from './components/FortuneModal'
 import { MessageViewModal } from './components/MessageViewModal'
 import { CountdownTimer } from './components/CountdownTimer'
 import { GuestBook } from './components/GuestBook'
+import { ChristmasGame } from './components/ChristmasGame'
+import type { Card, GuestEntry } from './types/models'
 import './App.css'
-
-interface Card {
-  id: string
-  wish: string
-  author: string
-}
-
-interface Wish {
-  id: string
-  wish: string
-}
-
-interface GuestEntry {
-  id: string
-  name: string
-  message: string
-  timestamp: number
-}
 
 function App() {
   const [cards, setCards] = useState<Card[]>([])
-  const [wishes, setWishes] = useState<Wish[]>([])
   const [guestEntries, setGuestEntries] = useState<GuestEntry[]>([])
   const [isCardModalOpen, setIsCardModalOpen] = useState(false)
-  const [isWishModalOpen, setIsWishModalOpen] = useState(false)
   const [isFortuneModalOpen, setIsFortuneModalOpen] = useState(false)
   const [isGuestBookOpen, setIsGuestBookOpen] = useState(false)
+  const [isGameOpen, setIsGameOpen] = useState(false)
   const [viewMessage, setViewMessage] = useState<{
     isOpen: boolean
-    type: 'card' | 'wish'
+    type: 'card'
     message: string
     author?: string
   }>({
@@ -45,17 +28,12 @@ function App() {
     author: ''
   })
 
-  // 로컬 스토리지에서 데이터 불러오기
   useEffect(() => {
     const savedCards = localStorage.getItem('christmas-cards')
-    const savedWishes = localStorage.getItem('christmas-wishes')
     const savedGuestEntries = localStorage.getItem('christmas-guestbook')
 
     if (savedCards) {
       setCards(JSON.parse(savedCards))
-    }
-    if (savedWishes) {
-      setWishes(JSON.parse(savedWishes))
     }
     if (savedGuestEntries) {
       setGuestEntries(JSON.parse(savedGuestEntries))
@@ -69,20 +47,11 @@ function App() {
       wish,
       author,
     }
-    const updatedCards = [...cards, newCard]
-    setCards(updatedCards)
-    localStorage.setItem('christmas-cards', JSON.stringify(updatedCards))
-  }
-
-  // 소원 추가
-  const handleAddWish = (wish: string) => {
-    const newWish: Wish = {
-      id: Date.now().toString(),
-      wish,
-    }
-    const updatedWishes = [...wishes, newWish]
-    setWishes(updatedWishes)
-    localStorage.setItem('christmas-wishes', JSON.stringify(updatedWishes))
+    setCards((prev) => {
+      const updated = [...prev, newCard]
+      localStorage.setItem('christmas-cards', JSON.stringify(updated))
+      return updated
+    })
   }
 
   // 방명록 추가
@@ -93,9 +62,11 @@ function App() {
       message,
       timestamp: Date.now()
     }
-    const updatedEntries = [...guestEntries, newEntry]
-    setGuestEntries(updatedEntries)
-    localStorage.setItem('christmas-guestbook', JSON.stringify(updatedEntries))
+    setGuestEntries((prev) => {
+      const updated = [...prev, newEntry]
+      localStorage.setItem('christmas-guestbook', JSON.stringify(updated))
+      return updated
+    })
   }
 
   // 카드 클릭 시 상세보기
@@ -108,18 +79,6 @@ function App() {
     })
   }
 
-  // 장식 구슬 클릭 시
-  const handleOrnamentClick = (wish: Wish | null) => {
-    if (wish) {
-      setViewMessage({
-        isOpen: true,
-        type: 'wish',
-        message: wish.wish
-      })
-    } else {
-      setIsWishModalOpen(true)
-    }
-  }
 
   return (
     <div className="app">
@@ -130,9 +89,7 @@ function App() {
       <div className="scene-container">
         <ChristmasScene
           cards={cards}
-          wishes={wishes}
           onCardClick={handleCardClick}
-          onOrnamentClick={handleOrnamentClick}
         />
       </div>
 
@@ -162,10 +119,6 @@ function App() {
           <span className="btn-icon">💌</span>
           <span className="btn-text">카드 작성</span>
         </button>
-        <button className="action-btn wish-btn" onClick={() => setIsWishModalOpen(true)}>
-          <span className="btn-icon">⭐</span>
-          <span className="btn-text">소원 빌기</span>
-        </button>
         <button className="action-btn fortune-btn" onClick={() => setIsFortuneModalOpen(true)}>
           <span className="btn-icon">🎴</span>
           <span className="btn-text">운세 뽑기</span>
@@ -174,14 +127,18 @@ function App() {
           <span className="btn-icon">📖</span>
           <span className="btn-text">방명록</span>
         </button>
+        <button className="action-btn game-btn" onClick={() => setIsGameOpen(true)}>
+          <span className="btn-icon">🎮</span>
+          <span className="btn-text">미니게임</span>
+        </button>
       </div>
 
       {/* 안내 메시지 */}
       <div className="info-message">
-        <p>🎄 트리의 구슬을 클릭하여 소원을 확인하거나 새 소원을 적어보세요!</p>
         <p>💌 카드를 클릭하면 메시지를 확인할 수 있어요!</p>
         <p>🎴 2026년 신년 운세도 뽑아보세요!</p>
         <p>📖 방명록에 따뜻한 메시지를 남겨주세요!</p>
+        <p>🎮 미니 게임으로 재미있게 놀아보세요!</p>
       </div>
 
       {/* 카드 작성 모달 */}
@@ -190,14 +147,6 @@ function App() {
         onClose={() => setIsCardModalOpen(false)}
         onSubmit={handleAddCard}
         type="card"
-      />
-
-      {/* 소원 작성 모달 */}
-      <CardModal
-        isOpen={isWishModalOpen}
-        onClose={() => setIsWishModalOpen(false)}
-        onSubmit={(wish) => handleAddWish(wish)}
-        type="ornament"
       />
 
       {/* 운세 모달 */}
@@ -221,6 +170,12 @@ function App() {
         type={viewMessage.type}
         message={viewMessage.message}
         author={viewMessage.author}
+      />
+
+      {/* 미니 게임 */}
+      <ChristmasGame
+        isOpen={isGameOpen}
+        onClose={() => setIsGameOpen(false)}
       />
     </div>
   )

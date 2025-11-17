@@ -1,60 +1,54 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Stars, Environment } from '@react-three/drei'
+import { useMemo } from 'react'
+import type { Card } from '../types/models'
 import { ChristmasTree } from './ChristmasTree'
 import { Snowfall } from './Snowfall'
 import { Gifts } from './Gifts'
 import { WishCard } from './WishCard'
-import { InteractiveOrnament } from './InteractiveOrnament'
 import { SantaSleigh } from './SantaSleigh'
 import { ChristmasHouse } from './ChristmasHouse'
 import { Snowman } from './Snowman'
 
-interface Card {
-  id: string
-  wish: string
-  author: string
-}
-
-interface Wish {
-  id: string
-  wish: string
-}
-
 interface ChristmasSceneProps {
   cards: Card[]
-  wishes: Wish[]
   onCardClick: (card: Card) => void
-  onOrnamentClick: (wish: Wish | null) => void
 }
 
-export function ChristmasScene({ cards, wishes, onCardClick, onOrnamentClick }: ChristmasSceneProps) {
-  // 장식 구슬 위치 정의
-  const ornamentPositions: [number, number, number][] = [
-    [-0.4, 0.8, 0.3],
-    [0.4, 0.6, 0.2],
-    [-0.3, 0.3, -0.2],
-    [0.3, 0.1, 0.3],
-    [0, -0.2, -0.3],
-    [-0.35, -0.5, 0.2],
-    [0.35, -0.8, -0.1],
-  ]
+export function ChristmasScene({ cards, onCardClick }: ChristmasSceneProps) {
+  const cardPositions = useMemo(() => {
+    const radius = 2.5
+    const colors = ['#ffe4e1', '#fff0f5', '#f0f8ff', '#fffacd', '#f5f5dc']
+
+    return cards.map((card, index) => {
+      const angle = (index / Math.max(cards.length, 1)) * Math.PI * 2
+      const x = Math.cos(angle) * radius
+      const z = Math.sin(angle) * radius
+
+      return {
+        card,
+        position: [x, 0.5 + index * 0.3, z] as [number, number, number],
+        color: colors[index % colors.length],
+      }
+    })
+  }, [cards])
 
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 60 }}
       shadows
-      gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
-      dpr={[1, 2]}
+      gl={{ antialias: false, alpha: false, powerPreference: 'high-performance' }}
+      dpr={[1, 1.5]}
       style={{ background: 'linear-gradient(to bottom, #001a33 0%, #003366 100%)' }}
     >
       {/* 조명 개선 */}
       <ambientLight intensity={0.4} />
       <directionalLight
         position={[5, 8, 5]}
-        intensity={1.2}
+        intensity={1}
         castShadow
-        shadow-mapSize-width={4096}
-        shadow-mapSize-height={4096}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
         shadow-camera-far={50}
         shadow-camera-left={-10}
         shadow-camera-right={10}
@@ -65,10 +59,10 @@ export function ChristmasScene({ cards, wishes, onCardClick, onOrnamentClick }: 
       <pointLight position={[5, 2, 5]} intensity={0.6} color="#ffaa00" />
 
       {/* 환경 맵 (반사 효과) */}
-      <Environment preset="night" />
+      <Environment preset="night" resolution={256} />
 
       {/* 별이 빛나는 배경 */}
-      <Stars radius={100} depth={50} count={7000} factor={5} saturation={0} fade speed={1} />
+      <Stars radius={75} depth={40} count={2500} factor={4} saturation={0} fade speed={0.6} />
 
       {/* 산타와 루돌프 썰매 */}
       <SantaSleigh />
@@ -82,44 +76,23 @@ export function ChristmasScene({ cards, wishes, onCardClick, onOrnamentClick }: 
       {/* 눈사람 */}
       <Snowman />
 
-      {/* 소원 장식 구슬들 */}
-      {ornamentPositions.map((pos, index) => {
-        const wishData = wishes[index]
-        return (
-          <InteractiveOrnament
-            key={`ornament-${index}`}
-            position={pos}
-            wish={wishData?.wish}
-            onClick={() => onOrnamentClick(wishData || null)}
-          />
-        )
-      })}
-
       {/* 선물 상자들 */}
       <Gifts />
 
       {/* 크리스마스 카드들 */}
-      {cards.map((card, index) => {
-        const angle = (index / Math.max(cards.length, 1)) * Math.PI * 2
-        const radius = 2.5
-        const x = Math.cos(angle) * radius
-        const z = Math.sin(angle) * radius
-        const colors = ['#ffe4e1', '#fff0f5', '#f0f8ff', '#fffacd', '#f5f5dc']
-
-        return (
-          <WishCard
-            key={card.id}
-            position={[x, 0.5 + index * 0.3, z]}
-            wish={card.wish}
-            author={card.author}
-            color={colors[index % colors.length]}
-            onClick={() => onCardClick(card)}
-          />
-        )
-      })}
+      {cardPositions.map(({ card, position, color }) => (
+        <WishCard
+          key={card.id}
+          position={position}
+          wish={card.wish}
+          author={card.author}
+          color={color}
+          onClick={() => onCardClick(card)}
+        />
+      ))}
 
       {/* 눈 내리는 효과 */}
-      <Snowfall count={300} />
+      <Snowfall count={150} />
 
       {/* 바닥 (눈 덮인 땅) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow>

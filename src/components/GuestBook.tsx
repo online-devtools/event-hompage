@@ -1,12 +1,6 @@
 import { useState } from 'react'
+import type { GuestEntry } from '../types/models'
 import './GuestBook.css'
-
-interface GuestEntry {
-  id: string
-  name: string
-  message: string
-  timestamp: number
-}
 
 interface GuestBookProps {
   isOpen: boolean
